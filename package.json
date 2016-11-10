@@ -25,11 +25,22 @@
     "url": "https://github.com/ananthamapod/Insanity-Insights.git"
   },
   "author": "Ananth Rao",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/ananthamapod/Insanity-Insights/issues"
   },
   "scripts": {
     "start": "nodemon app.js"
+  },
+  "devDependencies": {
+    "babel-core": "^6.18.2",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-stage-0": "^6.16.0",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-sass": "^2.3.2",
+    "pump": "^1.0.1"
   }
 }
