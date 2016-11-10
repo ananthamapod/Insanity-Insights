@@ -1,0 +1,35 @@
+{
+  "name": "insanityinsights",
+  "version": "0.1.10",
+  "description": "App that uses the Personality Insights service from IBM Watson and Weather and Twitter APIs to correlate political sentiment with local weather",
+  "dependencies": {
+    "body-parser": "^1.11.0",
+    "cookie-parser": "^1.4.0",
+    "csurf": "^1.8.3",
+    "express": "^4.13.3",
+    "express-rate-limit": "^2.0.2",
+    "express-secure-only": "^0.2.1",
+    "helmet": "^0.13.0",
+    "i18next": "^1.10.2",
+    "morgan": "^1.6.1",
+    "pug": "^2.0.0-beta6",
+    "querystring": "^0.2.0",
+    "request": "^2.65.0",
+    "watson-developer-cloud": "^1.0.0-beta.1"
+  },
+  "engines": {
+    "node": ">=0.10"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ananthamapod/Insanity-Insights.git"
+  },
+  "author": "Ananth Rao",
+  "license": "Apache 2.0",
+  "bugs": {
+    "url": "https://github.com/ananthamapod/Insanity-Insights/issues"
+  },
+  "scripts": {
+    "start": "nodemon app.js"
+  }
+}

@@ -1,0 +1,122 @@
+extends layout
+
+block content
+  .row.service-container
+    .col-lg-12.service-header
+      .row.top-nav.navbar-fixed-top
+        .container
+          a.top-nav--logo-link(href='http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/')
+            h3.heading.left
+              | IBM
+              span.top-nav--logo-wdc  Watson Developer Cloud
+          nav.top-nav--nav
+            li.top-nav--nav-item
+              a(href='http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/services-catalog.html') Services
+            li.top-nav--nav-item
+              a(href='http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/doc/') Docs
+            li.top-nav--nav-item
+              a(href='http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/gallery.html') App Gallery
+            li.top-nav--nav-item
+              a(href='http://developer.ibm.com/watson/') Community
+      .row.header
+        .container
+          .avatar.img-container.col-lg-2.col-md-2.col-sm-2.hidden-xs
+            img.service-icon(src='/images/app.png')
+          .col-lg-10.col-md-10.col-sm-10.col-xs-12.dialog-description
+            h1.service-title(style='font-size:50px;') Insanity Insights
+            p
+              | Looking for similarities between local weather and political sentiment. Because this election is both pathetic and frought with fallacy.
+            .resource
+              img.link-icon(src='/images/link.svg')
+              strong Resources:
+            .resource-item-container
+              a.resource-item(href='https://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/personality-insights/api') API Reference
+              a.resource-item(href='http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/doc/personality-insights/') Documentation
+              a.resource-item(href='https://github.com/watson-developer-cloud/personality-insights-nodejs') Fork on Github
+              a.resource-item(href='http://bluemix.net/deploy?repository=https://github.com/watson-developer-cloud/personality-insights-nodejs.git') Fork and Deploy on Bluemix
+  .container
+    .row
+      .col-lg-6.col-md-12.col-xs-12
+        h2 Input Text
+        p
+          | We need a minimum of 3500 words and ideally 6000 words or more to compute statistically significant results. See
+          a(href='http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/doc/personality-insights/science.shtml')  the science behind the service
+          | .
+        p
+          | Ideally, the text should contain words we use in every day life relating to personal experiences, thoughts and responses. See
+          a(href='http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/doc/personality-insights/guidance.shtml#optimal')  usage guidance
+          |           for details.
+        .well
+          .form-group.row
+            .col-lg-12.col-xs-12(style='padding:0px;')
+              label.col-lg-6.col-md-6.col-xs-6.control-label Choose Language:
+              .col-lg-6.col-md-6.col-xs-6.sample-radio-list
+                .sample-radio-container
+                  label
+                    input#english_radio.sample-radio(type='radio', name='sample_text', value='en', checked='')
+                    span English
+                .sample-radio-container
+                  label
+                    input.sample-radio(type='radio', name='sample_text', value='es')
+                    span Spanish
+              textarea.content.form-control(rows='12', required='true', name='text', placeholder='Please enter English text to analyze (minimum of 100 words)...')
+              .text-right.wordsCountFootnote
+                span.wordsCount.small
+                span.small  words
+          .form-group.row.buttons-container
+            .col-lg-4.col-xs-4
+              button.btn.btn-block.clear-btn(type='button') Clear
+            .col-lg-4.col-lg-push-4.col-xs-4.col-xs-push-4
+              button.btn.btn-block.analysis-btn(type='button') Analyze
+      .col-lg-6.col-md-12.col-xs-12
+        .form-group.row.loading.text-center.loading(style='display:none;')
+          h2  
+          img(src='images/watson.gif')
+        .form-group.row.error(style='display: none;')
+          h2  
+          .well
+            p.errorMsg
+            .captcha(style='display:none;margin-bottom:10px;')
+              .g-recaptcha(data-sitekey='6LcRbQkTAAAAAGUFVbnuqDfse-XZASLZwoC34oJV')
+        .results(style='display: none;')
+          h2 Your Personality*
+          .well
+            .summary-div
+            .text-right(style='color: gray')
+              em.small *Compared to most people who participated in our surveys.
+            .text-right(style='color: gray')
+              em.small.outputMessageFootnote
+      .results(style='display: none;')
+        .row
+          .col-lg-5.col-md-12.col-xs-12
+            h3 Data Behind Your Personality
+            .col555px.well.traits(style='display: none;')
+          .col-lg-7.col-xs-12.col-md-12
+            h3 Visualization of Personality Data
+            #vizcontainer.well
+      .hidden
+        #header-template
+          .row.theader
+            .col-lg-7.col-xs-7
+              span Name
+            .col-lg-5.col-xs-5.text-right
+              span Value
+        #trait-template
+          .row
+            .tname.col-lg-7.col-xs-7
+              span
+            .tvalue.col-lg-5.col-xs-5.text-right
+              span
+        #model-template
+          .row
+            .col-lg-12.col-xs-12.text-center
+              span
+  script(type='text/javascript', src='https://code.jquery.com/jquery-1.11.3.min.js')
+  script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/d3/2.10.0/d3.v2.min.js')
+  script(type='text/javascript', src='/js/demo.js')
+  script(type='text/javascript', src='/js/personality.js')
+  script(type='text/javascript', src='/js/string-utils.js')
+  script(type='text/javascript', src='/js/i18n.js')
+  script(type='text/javascript', src='/js/textsummary.js')
+  script(type='text/javascript').
+    textSummary.init('json');
