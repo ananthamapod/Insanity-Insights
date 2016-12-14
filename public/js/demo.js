@@ -18,6 +18,75 @@
 'use strict';
 
 $(document).ready(function() {
+  window.geolocation = undefined
+  window.targetlocation = undefined
+  $(document).keydown(function(e) {
+    if (e.which == 16) {
+      window.shiftPressed = true
+    }
+  })
+  $(document).keyup(function(e) {
+    if (e.which == 16) {
+      window.shiftPressed = false
+    }
+  })
+  var generateMap = function() {
+    window.map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 12,
+      center: new google.maps.LatLng(
+        window.geolocation? window.geolocation.latitude : 2.8,
+        window.geolocation? window.geolocation.longitude : -187.3
+      ),
+      mapTypeId: 'terrain'
+    })
+    window.marker = new google.maps.Marker({
+      position: {lat: window.geolocation.latitude, lng: window.geolocation.longitude},
+      map: window.map,
+      title: "Fire Here!"
+    })
+    window.map.addListener("click", function (e) {
+      if (window.shiftPressed) {
+        console.log("Marker!")
+        console.log(e.latLng.lat())
+        console.log(e.latLng.lng())
+        window.marker.setPosition(new google.maps.LatLng(e.latLng.lat(), e.latLng.lng()))
+        window.targetlocation = {latitude: e.latLng.lat(), longitude: e.latLng.lng()}
+        window.marker.setAnimation(google.maps.Animation.BOUNCE)
+        setTimeout(function() {
+          window.marker.setAnimation(null)
+        }, 1000)
+      }
+    });
+    console.log(window.geolocation)
+  }
+
+  var getLocation = function(callback) {
+    if ("geolocation" in window.navigator) {
+      window.navigator.geolocation.getCurrentPosition(function(position) {
+        let lat = position.coords.latitude
+        let lng = position.coords.longitude
+        window.geolocation = {latitude:lat, longitude:lng}
+        window.targetlocation = window.geolocation
+        console.log(window.geolocation)
+        callback()
+      })
+    } else {
+      $.ajax({
+        type: 'GET',
+        url: 'https://geoip.nekudo.com/api',
+        success: function(data) {
+          window.geolocation = {latitude:data.location.latitude, longitude:data.location.longitude}
+          window.targetlocation = window.geolocation
+          console.log(window.geolocation)
+          callback()
+        },
+        error: function(err) {
+          console.log(err)
+        }
+      })
+    }
+  }
+  getLocation(generateMap)
 
   var demo = {
     getTooltip : undefined // Loaded later
@@ -135,6 +204,101 @@ $(document).ready(function() {
       }
     });
   });
+
+  $('.twitter-btn').click(function() {
+    $('.twitter-btn').blur()
+    $loading.show()
+    let querystring = $('.querystring').val()
+
+    $.ajax({
+      headers: {
+        'csrf-token': $('meta[name="ct"]').attr('content')
+      },
+      type: 'GET',
+      data: {
+        location: window.targetlocation,
+        querystring: querystring
+      },
+      url: '/api/twitter',
+      dataType: 'json',
+      success: function(response) {
+        $loading.hide()
+
+        if (response.error) {
+          showError(response.error)
+        } else {
+          $content.eq(0).val((response.statuses.map(function(elem) { return elem.text })).join('\n'))
+        }
+      },
+      error: function(xhr) {
+        $loading.hide();
+
+        var error;
+        try {
+          error = JSON.parse(xhr.responseText || {});
+        } catch(e) {}
+
+        if (xhr && xhr.status === 429){
+          $captcha.css('display','table');
+          $('.errorMsg').css('color','black');
+          error.error = 'Complete the captcha to proceed';
+        } else {
+          $('.errorMsg').css('color','red');
+        }
+
+        showError(error ? (error.error || error): '');
+      }
+    })
+  })
+
+  $('.weather-btn').click(function() {
+    $('.weather-btn').blur()
+    $loading.show()
+
+    $.ajax({
+      headers: {
+        'csrf-token': $('meta[name="ct"]').attr('content')
+      },
+      type: 'GET',
+      data: {
+        location: {lat:window.targetlocation.latitude, lng: window.targetlocation.longitude}
+      },
+      url: '/api/weather',
+      dataType: 'json',
+      success: function(response) {
+        $loading.hide()
+
+        if (response.error) {
+          showError(response.error)
+        } else {
+          $content.eq(1).val((JSON.stringify(response)))
+          $('.weather-longitude').html(response.coord.lon)
+          $('.weather-latitude').html(response.coord.lat)
+          $('.weather-description').html(response.weather[0].description)
+          $('.weather-location').html(response.name)
+          $('.weather-icon').attr("src", "http://openweathermap.org/img/w/" + response.weather[0].icon + ".png")
+        }
+      },
+      error: function(xhr) {
+        $loading.hide();
+
+        var error;
+        try {
+          error = JSON.parse(xhr.responseText || {});
+        } catch(e) {}
+
+        if (xhr && xhr.status === 429){
+          $captcha.css('display','table');
+          $('.errorMsg').css('color','black');
+          error.error = 'Complete the captcha to proceed';
+        } else {
+          $('.errorMsg').css('color','red');
+        }
+
+        showError(error ? (error.error || error): '');
+      }
+    })
+  })
 
   /**
    * Display an error or a default message

@@ -24,10 +24,11 @@ const personalityInsights = watson.personality_insights({
 console.log(personalityInsights)
 
 const twitterSearch = function(req, res, next) {
-  let location = req.body? req.body.location : null
-  console.log(config.Twitter.auth)
-  let url = "https://api.twitter.com/1.1/search/tweets.json?q=trump&result_type=recent" +
-    (location ? "&" + qs.stringify({ geocode:location }) : "")
+  let location = req.query? req.query.location : null
+  let url = "https://api.twitter.com/1.1/search/tweets.json?q=" +
+    (req.query && req.query.querystring? req.query.querystring : "trump") +
+    "&result_type=recent" +
+    (location ? "&" + JSON.stringify({ geocode:location }) : "")
   console.log(url)
   request({
     url: url,
@@ -37,7 +38,6 @@ const twitterSearch = function(req, res, next) {
     }
   }, function(error, response, body) {
     if (!error && response.statusCode == 200) {
-      console.log(body)
       res.json(JSON.parse(body))
     } else {
       console.log(error)
@@ -66,7 +66,7 @@ app.get('/maps',
       method: "GET"
     }, function(error, response, body) {
       if (!error && response.statusCode == 200) {
-        res.json(JSON.parse(body))
+        res.send(body)
       }
     })
   }
@@ -74,13 +74,14 @@ app.get('/maps',
 
 app.get('/weather',
   function(req, res, next) {
-    let location = req.body? req.body.location : null
+    let location = req.query? req.query.location : null
     request({
       url: "http://api.openweathermap.org/data/2.5/weather?" +
         qs.stringify({ appid: config.OpenWeather.key }) +
         (location ? "&" + qs.stringify({ lat: location.lat, lon: location.lng }) : ""),
       method: "GET"
     }, function(error, response, body) {
+      console.log("requested")
       if (!error && response.statusCode == 200) {
         console.log(body),
         res.json(JSON.parse(body))

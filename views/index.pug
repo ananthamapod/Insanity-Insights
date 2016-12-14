@@ -11,11 +11,63 @@ block content
           .col-lg-10.col-md-10.col-sm-10.col-xs-12.dialog-description
             h1.service-title(style='font-size:50px;') Insanity Insights
             p
-              | Looking for similarities between local weather and political sentiment. Because this election is both pathetic and frought with fallacy.
-  a(href="https://github.com/ananthamapod")
+              | Looking for similarities between local weather and political sentiment. Because pickles.
+  a(href="https://github.com/ananthamapod/Insanity-Insights")
     img(style="position: absolute; top: 0; right: 0; border: 0;", src="https://camo.githubusercontent.com/52760788cde945287fbb584134c4cbc2bc36f904/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67", alt="Fork me on GitHub", data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png")
   .container
     .row
+      .col-lg-6.col-md-12.col-xs-12
+        h2 Input Text
+        .well
+          .form-group.row
+            .col-lg-12.col-xs-12(style='padding:0px;')
+              label.col-lg-6.col-md-6.col-xs-6.control-label(style='display:none') Choose Language:
+              .col-lg-6.col-md-6.col-xs-6.sample-radio-list(style='display:none')
+                .sample-radio-container
+                  label
+                    input#english_radio.sample-radio(type='radio', name='sample_text', value='en', checked='')
+                    span English
+                .sample-radio-container
+                  label
+                    input.sample-radio(type='radio', name='sample_text', value='es')
+                    span Spanish
+              label.col-lg-6.col-md-6.col-xs-6.control-label Enter keywords here:
+              input.querystring.form-control(type='text')
+              textarea.content.form-control(rows='12', required='true', name='text', placeholder='Please enter English text to analyze (minimum of 100 words)...')
+              .text-right.wordsCountFootnote
+                span.wordsCount.small
+                span.small  words
+          .form-group.row.buttons-container
+            .col-lg-4.col-xs-4
+              button.btn.btn-block.clear-btn(type='button') Clear
+            .col-lg-4.col-xs-4
+              button.btn.btn-block.twitter-btn(type='button') Get Text
+            .col-lg-4.col-xs-4
+              button.btn.btn-block.analysis-btn(type='button') Analyze
+            .col-lg-4.col-xs-4
+              button.btn.btn-block.weather-btn(type='button') Weather
+          .row.weather-data
+            .col-xs-6
+              | longitude
+            .col-xs-6.weather-longitude
+            .col-xs-6
+              | latitude
+            .col-xs-6.weather-latitude
+            .col-xs-6
+              | description
+            .col-xs-6.weather-description
+            .col-xs-6
+              | location
+            .col-xs-6.weather-location
+            .col-xs-6
+              | icon
+            img.weather-icon
+
+      .col-lg-6.col-md-12.col-xs-12
+        h2 Input Text
+        .well
+          #map(style="height: 400px; width: 400px")
+
       .col-lg-6.col-md-12.col-xs-12
         h2 Input Text
         p
@@ -93,6 +145,7 @@ block content
               span
   script(type='text/javascript', src='https://code.jquery.com/jquery-1.11.3.min.js')
   script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/d3/2.10.0/d3.v2.min.js')
+  script(type='text/javascript', src='/api/maps')
   script(type='text/javascript', src='/js/demo.js')
   script(type='text/javascript', src='/js/personality.js')
   script(type='text/javascript', src='/js/string-utils.js')
