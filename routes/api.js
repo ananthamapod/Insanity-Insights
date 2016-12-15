@@ -11,7 +11,12 @@ const i18n = require('i18next')
 //i18n settings
 require('../config/i18n')(app);
 
-const config = require('../config/secret.json')
+var config
+if (process.env.VCAP_SERVICES) {
+  config = JSON.parse(process.env.apiKeys)
+} else {
+  config = require('../config/secret.json')
+}
 
 
 // Create the service wrapper
